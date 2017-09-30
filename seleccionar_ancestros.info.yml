@@ -1,0 +1,7 @@
+#seleccionar_ancestros.info.yml
+name: Seleccionar ancestros
+description: Selecciona automáticamente los ancestros de los términos de taxonomía seleccionados en Lugar de nacimiento.
+package: AUTORES
+
+type: module
+core: 8.x

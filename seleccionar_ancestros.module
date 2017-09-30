@@ -1,0 +1,35 @@
+<?php
+
+function ancestros ($hijos) // Dado un array de terminos de taxonomia, devuelve todos sus ancestros, incluidos los terminos originales
+{
+    
+    $field_lugares = array ();
+    
+    foreach ($hijos as $lugar) {
+    
+        $tidlugar = $lugar['target_id'];
+    
+        $storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+        $parents = $storage->loadAllParents($tidlugar);
+
+        foreach ($parents as $parent => $valor) {
+            array_push($field_lugares, $parent);
+        }
+    }
+
+    $field_lugares = array_unique($field_lugares); // Quito duplicados
+    arsort($field_lugares);
+    return($field_lugares);
+}
+
+
+function seleccionar_ancestros_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+
+    if (($entity->getEntityTypeId() == 'node') && ($entity->getType() == 'autor')) {
+        $arreglo = $entity->toArray();
+        
+        $field_lugardenacimiento = ancestros($arreglo['field_lugardenacimiento']);
+        $entity->set('field_lugardenacimiento', $field_lugardenacimiento);
+
+    }
+}
